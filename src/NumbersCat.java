@@ -3,7 +3,24 @@ import java.util.Arrays;
 public class NumbersCat {
 
     public static String say(long n) {
-        return PrimeraLetraMayus(Del31al99(n));
+        long nP = 0;
+
+        if (n < 0){
+            nP = n * -1;
+        }else {
+            nP = n;
+        }
+
+        if (nP <= 99){
+            return PrimeraLetraMayus(Decenas(n));
+        } else if (nP <= 999) {
+            return PrimeraLetraMayus(Centenas(n));
+        } else if (nP <= 999_999) {
+            return PrimeraLetraMayus(Miles(n));
+        } else {
+            return "";
+        }
+
 
     }
 
@@ -24,6 +41,88 @@ public class NumbersCat {
         }
         return resultado;
 
+    }
+
+    public static long[] CrearArray(long n){
+        String numero = String.valueOf(n);
+
+        long [] array = new long[numero.length()];
+
+        for (int i = 0; i < numero.length(); i++) {
+            array[i] = Character.getNumericValue(numero.charAt(i));
+        }
+
+        return array;
+
+    }
+
+    public static String Decenas(long n){
+        long nP = 0;
+
+        if (n < 0){
+            nP = n * -1;
+        }else {
+            nP = n;
+        }
+
+        if (nP >= 0 && nP <= 19){
+            return NumeroUnicoString(n);
+        } else if (nP % 10 == 0 ) {
+            return MultiploDeDiez(n);
+        } else if (nP >= 21 && nP <= 29) {
+            return Del20al29(n);
+        } else if (nP >= 31 && nP <= 99) {
+            return Del31al99(n);
+        } else {
+            return "";
+        }
+
+    }
+
+    public static String Centenas(long n){
+        String resultado = "";
+
+        if (n < 0){
+            resultado += "menys ";
+            n = n * -1;
+        }
+
+        long[] arNumeros = CrearArray(n);
+
+        if (arNumeros[0] == 1 && arNumeros[1] == 0 && arNumeros[2] == 0){
+            resultado += "cent";
+        } else if (arNumeros[0] == 1 && arNumeros[1] == 0) {
+            resultado += "cent ";
+            resultado += NumeroUnicoString(arNumeros[2]);
+        } else if (arNumeros[0] == 1 && arNumeros[1] > 0) {
+            resultado += "cent ";
+            resultado += Decenas(n - 100);
+        } else if (n % 100 == 0) {
+            resultado += NumeroUnicoString(arNumeros[0]);
+            resultado += "-cents";
+        } else if (arNumeros[0] > 1 && arNumeros[1] == 0) {
+            resultado += NumeroUnicoString(arNumeros[0]);
+            resultado += "-cents ";
+            resultado += NumeroUnicoString(arNumeros[2]);
+        } else {
+            resultado += NumeroUnicoString(arNumeros[0]);
+            resultado += "-cents ";
+            resultado += Decenas(n - (arNumeros[0]*100));
+        }
+
+        return resultado;
+
+    }
+
+    public static String Miles(long n){
+        String resultado = "";
+
+        if (n < 0){
+            resultado += "menys ";
+            n = n * -1;
+        }
+
+        return resultado;
     }
 
     public static String NumeroUnicoString(long n) {
@@ -79,15 +178,19 @@ public class NumbersCat {
 
     }
 
-    public static String MultiploDeDiez(long n){
+    public static String MultiploDeDiez(long n) {
         String resultado = "";
 
-        if (n < 0){
+        if (n < 0) {
             resultado += "menys ";
             n = n * -1;
         }
 
-        if (n == 30) {
+        if (n == 10){
+            resultado += "deu";
+        }else if (n == 20){
+            resultado += "vint";
+        }else if (n == 30) {
             resultado += "trenta";
         } else if (n == 40) {
             resultado += "quaranta";
@@ -144,20 +247,18 @@ public class NumbersCat {
             resultado += "menys ";
             n = n * -1;
         }
+        long[] arNumeros = CrearArray(n);
 
-        String numero = String.valueOf(n);
-
-        long [] array = new long[numero.length()];
-
-        for (int i = 0; i < numero.length(); i++) {
-            array[i] = Character.getNumericValue(numero.charAt(i));
+        if(arNumeros[1] == 0){
+            resultado += MultiploDeDiez(arNumeros[0] * 10);
+        }else {
+            resultado += MultiploDeDiez(arNumeros[0] * 10);
+            resultado += "-";
+            resultado += NumeroUnicoString(arNumeros[1]);
         }
-        System.out.println(Arrays.toString(array));
-
-        resultado += MultiploDeDiez(array[0] * 10);
-        resultado += "-";
-        resultado += NumeroUnicoString(array[1]);
 
         return resultado;
     }
+
+
 }
