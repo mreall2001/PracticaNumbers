@@ -63,7 +63,7 @@ public class NumbersCatTest {
     @org.junit.Test
     public void test6() {
         assertEquals("Un bilió",
-                NumbersCat.say(1_000_000_000_000L));
+                NumbersCat.say(3_000_000_000_000L));
         assertEquals("Mil bilions",
                 NumbersCat.say(1_000_000_000_000_000L));
         assertEquals("Cent seixanta-cinc mil quaranta-tres bilions dos-cents disset mil nou-cents vuitanta-set milions cinquanta mil cent sis",

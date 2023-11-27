@@ -5,22 +5,27 @@ public class NumbersCat {
     public static String say(long n) {
         long nP = 0;
 
-        if (n < 0){
+        if (n < 0) {
             nP = n * -1;
-        }else {
+        } else {
             nP = n;
         }
 
-        if (nP <= 99){
+        if (nP == 0) {
+            return "Zero";
+        } else if (nP <= 99) {
             return PrimeraLetraMayus(Decenas(n));
         } else if (nP <= 999) {
             return PrimeraLetraMayus(Centenas(n));
         } else if (nP <= 999_999) {
             return PrimeraLetraMayus(Miles(n));
+        } else if (nP <= 999_999_999_999L) {
+            return PrimeraLetraMayus(Millones(n));
+        } else if (nP <= 999_999_999_999_999_999L) {
+            return PrimeraLetraMayus(Billones(n));
         } else {
             return "";
         }
-
 
     }
 
@@ -32,21 +37,21 @@ public class NumbersCat {
         return "";
     }
 
-
-    public static String PrimeraLetraMayus(String p){
+    public static String PrimeraLetraMayus(String p) {
         String resultado = "";
         resultado = String.valueOf(p.charAt(0)).toUpperCase();
         for (int i = 1; i < p.length(); i++) {
             resultado += p.charAt(i);
         }
+        System.out.println(resultado);
         return resultado;
 
     }
 
-    public static long[] CrearArray(long n){
+    public static long[] CrearArray(long n) {
         String numero = String.valueOf(n);
 
-        long [] array = new long[numero.length()];
+        long[] array = new long[numero.length()];
 
         for (int i = 0; i < numero.length(); i++) {
             array[i] = Character.getNumericValue(numero.charAt(i));
@@ -56,18 +61,18 @@ public class NumbersCat {
 
     }
 
-    public static String Decenas(long n){
+    public static String Decenas(long n) {
         long nP = 0;
 
-        if (n < 0){
+        if (n < 0) {
             nP = n * -1;
-        }else {
+        } else {
             nP = n;
         }
 
-        if (nP >= 0 && nP <= 19){
+        if (nP >= 0 && nP <= 19) {
             return NumeroUnicoString(n);
-        } else if (nP % 10 == 0 ) {
+        } else if (nP % 10 == 0) {
             return MultiploDeDiez(n);
         } else if (nP >= 21 && nP <= 29) {
             return Del20al29(n);
@@ -79,17 +84,19 @@ public class NumbersCat {
 
     }
 
-    public static String Centenas(long n){
+    public static String Centenas(long n) {
         String resultado = "";
 
-        if (n < 0){
+        if (n < 0) {
             resultado += "menys ";
             n = n * -1;
         }
 
         long[] arNumeros = CrearArray(n);
 
-        if (arNumeros[0] == 1 && arNumeros[1] == 0 && arNumeros[2] == 0){
+        if (n < 100) {
+            resultado += Decenas(n);
+        } else if (arNumeros[0] == 1 && arNumeros[1] == 0 && arNumeros[2] == 0) {
             resultado += "cent";
         } else if (arNumeros[0] == 1 && arNumeros[1] == 0) {
             resultado += "cent ";
@@ -107,35 +114,163 @@ public class NumbersCat {
         } else {
             resultado += NumeroUnicoString(arNumeros[0]);
             resultado += "-cents ";
-            resultado += Decenas(n - (arNumeros[0]*100));
+            resultado += Decenas(n - (arNumeros[0] * 100));
         }
 
         return resultado;
 
     }
 
-    public static String Miles(long n){
+    public static String Miles(long n) {
         String resultado = "";
 
-        if (n < 0){
+        if (n < 0) {
             resultado += "menys ";
             n = n * -1;
         }
 
+        if (n < 100){
+            return resultado + Centenas(n);
+        }
+
+        long[] arNumeros = CrearArray(n);
+        long[] arDos = { arNumeros[0], arNumeros[1] };
+        long[] arTres = { arNumeros[0], arNumeros[1], arNumeros[2] };
+
+         if (n % 1000 == 0 && n < 9999) {
+            if (n == 1000) {
+                resultado += "mil";
+            } else {
+                resultado += Decenas(arNumeros[0]);
+                resultado += " mil";
+            }
+        } else if (n % 10000 == 0 && n < 99999) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " mil";
+        } else if (n % 100000 == 0 && n < 999999) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " mil";
+        } else if (n < 2000) {
+            resultado += "mil ";
+            resultado += Centenas(n - 1000);
+        } else if (arNumeros.length == 4) {
+            resultado += Decenas(arNumeros[0]);
+            resultado += " mil ";
+            resultado += Centenas(CrearNum(arNumeros, 1));
+        } else if (arNumeros.length == 5) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " mil ";
+            resultado += Centenas(CrearNum(arNumeros, 2));
+        } else if (arNumeros.length == 6) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " mil ";
+            resultado += Centenas(CrearNum(arNumeros, 3));
+        }
+
+        return resultado.trim();
+    }
+
+    public static String Millones(long n) {
+        String resultado = "";
+
+        if (n < 0) {
+            resultado += "menys ";
+            n = n * -1;
+        }
+
+        long[] arNumeros = CrearArray(n);
+        long[] arDos = { arNumeros[0], arNumeros[1] };
+        long[] arTres = { arNumeros[0], arNumeros[1], arNumeros[2] };
+        long[] arCuatro = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3] };
+        long[] arCinco = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3], arNumeros[4] };
+        long[] arSeis = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3], arNumeros[4], arNumeros[5] };
+
+        if (arNumeros[0] == 1 && arNumeros.length == 7) {
+            if (n % 1_000_000 == 0) {
+                resultado += Decenas(arNumeros[0]);
+                resultado += " milió";
+            } else {
+                resultado += Decenas(arNumeros[0]);
+                resultado += " milió ";
+                resultado += Miles(CrearNum(arNumeros, 1));
+            }
+        } else if (n % 1_000_000 == 0 && n < 9_999_999) {
+            resultado += Decenas(arNumeros[0]);
+            resultado += " milions";
+        } else if (n % 10_000_000 == 0 && n < 99_999_999) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " milions";
+        } else if (n % 100_000_000 == 0 && n < 999_999_999) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " milions";
+        } else if (arNumeros.length == 8) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " milions ";
+            resultado += Miles(CrearNum(arNumeros, 2));
+        } else if (arNumeros.length == 9) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " milions ";
+            resultado += Miles(CrearNum(arNumeros, 3));
+        } else if (arNumeros.length == 10 && arNumeros[0] == 1) {
+            resultado += Miles(CrearNum(arCuatro, 0));
+            resultado += " milions ";
+        } else if (arNumeros.length == 11) {
+            resultado += Miles(CrearNum(arCinco, 0));
+            resultado += " milions ";
+            resultado += Miles(CrearNum(arNumeros, 5));
+        } else if (arNumeros.length == 12) {
+            resultado += Miles(CrearNum(arSeis, 0));
+            resultado += " milions ";
+            resultado += Miles(CrearNum(arNumeros, 6));
+        }
+
+        return resultado.trim();
+
+    }
+
+    public static String Billones(long n){
+        String resultado = "";
+
+        if (n < 0) {
+            resultado += "menys ";
+            n = n * -1;
+        }
+
+        long[] arNumeros = CrearArray(n);
+
+        if (n % 1_000_000_000_000L == 0 && n < 9_999_999_999_999L){
+            if (arNumeros[0] == 1){
+                resultado += Decenas(arNumeros[0]);
+                resultado += " bilió ";
+            }else {
+                resultado += Decenas(arNumeros[0]);
+                resultado += " bilions ";
+                resultado += Millones(CrearNum(arNumeros, 1));
+            }
+        }
+
+
+        return resultado.trim();
+    }
+
+    public static long CrearNum(long[] arNumeros, int indice) {
+        long resultado = 0;
+
+        for (int i = indice; i < arNumeros.length; i++) {
+            resultado = resultado * 10 + arNumeros[i];
+        }
         return resultado;
     }
 
     public static String NumeroUnicoString(long n) {
         String resultado = "";
 
-        if (n < 0){
+        if (n < 0) {
             resultado += "menys ";
             n = n * -1;
         }
 
-        if (n == 0) {
-            resultado += "zero";
-        } else if (n == 1) {
+        if (n == 1) {
             resultado += "un";
         } else if (n == 2) {
             resultado += "dos";
@@ -186,11 +321,11 @@ public class NumbersCat {
             n = n * -1;
         }
 
-        if (n == 10){
+        if (n == 10) {
             resultado += "deu";
-        }else if (n == 20){
+        } else if (n == 20) {
             resultado += "vint";
-        }else if (n == 30) {
+        } else if (n == 30) {
             resultado += "trenta";
         } else if (n == 40) {
             resultado += "quaranta";
@@ -208,10 +343,10 @@ public class NumbersCat {
         return resultado;
     }
 
-    public static String Del20al29(long n){
+    public static String Del20al29(long n) {
         String resultado = "";
 
-        if (n < 0){
+        if (n < 0) {
             resultado += "menys ";
             n = n * -1;
         }
@@ -240,18 +375,18 @@ public class NumbersCat {
         return resultado;
     }
 
-    public static String Del31al99(long n){
+    public static String Del31al99(long n) {
         String resultado = "";
 
-        if (n < 0){
+        if (n < 0) {
             resultado += "menys ";
             n = n * -1;
         }
         long[] arNumeros = CrearArray(n);
 
-        if(arNumeros[1] == 0){
+        if (arNumeros[1] == 0) {
             resultado += MultiploDeDiez(arNumeros[0] * 10);
-        }else {
+        } else {
             resultado += MultiploDeDiez(arNumeros[0] * 10);
             resultado += "-";
             resultado += NumeroUnicoString(arNumeros[1]);
@@ -259,6 +394,5 @@ public class NumbersCat {
 
         return resultado;
     }
-
 
 }
