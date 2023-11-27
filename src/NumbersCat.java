@@ -24,7 +24,7 @@ public class NumbersCat {
         } else if (nP <= 999_999_999_999_999_999L) {
             return PrimeraLetraMayus(Billones(n));
         } else {
-            return "";
+            return PrimeraLetraMayus(Trillones(n));
         }
 
     }
@@ -71,13 +71,13 @@ public class NumbersCat {
         }
 
         if (nP >= 0 && nP <= 19) {
-            return NumeroUnicoString(n);
+            return NumeroUnicoString(n).trim();
         } else if (nP % 10 == 0) {
-            return MultiploDeDiez(n);
+            return MultiploDeDiez(n).trim();
         } else if (nP >= 21 && nP <= 29) {
-            return Del20al29(n);
+            return Del20al29(n).trim();
         } else if (nP >= 31 && nP <= 99) {
-            return Del31al99(n);
+            return Del31al99(n).trim();
         } else {
             return "";
         }
@@ -117,7 +117,7 @@ public class NumbersCat {
             resultado += Decenas(n - (arNumeros[0] * 100));
         }
 
-        return resultado;
+        return resultado.trim();
 
     }
 
@@ -237,18 +237,125 @@ public class NumbersCat {
         }
 
         long[] arNumeros = CrearArray(n);
+        long[] arDos = { arNumeros[0], arNumeros[1] };
+        long[] arTres = { arNumeros[0], arNumeros[1], arNumeros[2] };
+        long[] arCuatro = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3] };
+        long[] arCinco = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3], arNumeros[4] };
+        long[] arSeis = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3], arNumeros[4], arNumeros[5] };
 
-        if (n % 1_000_000_000_000L == 0 && n < 9_999_999_999_999L){
-            if (arNumeros[0] == 1){
-                resultado += Decenas(arNumeros[0]);
-                resultado += " bilió ";
-            }else {
-                resultado += Decenas(arNumeros[0]);
-                resultado += " bilions ";
-                resultado += Millones(CrearNum(arNumeros, 1));
-            }
+
+        if (n == 1_000_000_000_000L){
+            resultado += Decenas(arNumeros[0]);
+            resultado += " bilió";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 13) {
+            resultado += Decenas(arNumeros[0]);
+            resultado += " bilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 14) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " bilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 15) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " bilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 16) {
+            resultado += Miles(CrearNum(arCuatro, 0));
+            resultado += " bilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 17) {
+            resultado += Miles(CrearNum(arCinco, 0));
+            resultado += " bilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 18) {
+            resultado += Miles(CrearNum(arSeis, 0));
+            resultado += " bilions ";
+        } else if (arNumeros.length == 13) {
+            resultado += Decenas(arNumeros[0]);
+            resultado += " bilions ";
+            resultado += Millones(CrearNum(arNumeros, 1));
+        } else if (arNumeros.length == 14) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " bilions ";
+            resultado += Millones(CrearNum(arNumeros, 2));
+        } else if (arNumeros.length == 15) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " bilions ";
+            resultado += Millones(CrearNum(arNumeros, 3));
+        } else if (arNumeros.length == 16) {
+            resultado += Miles(CrearNum(arCuatro, 0));
+            resultado += " bilions ";
+            resultado += Millones(CrearNum(arNumeros, 4));
+        } else if (arNumeros.length == 17) {
+            resultado += Miles(CrearNum(arCinco, 0));
+            resultado += " bilions ";
+            resultado += Millones(CrearNum(arNumeros, 5));
+        } else if (arNumeros.length == 18) {
+            resultado += Miles(CrearNum(arSeis, 0));
+            resultado += " bilions ";
+            resultado += Millones(CrearNum(arNumeros, 6));
         }
 
+
+        return resultado.trim();
+    }
+
+    public static String Trillones(long n){
+        String resultado = "";
+
+        if (n < 0) {
+            resultado += "menys ";
+            n = n * -1;
+        }
+
+        long[] arNumeros = CrearArray(n);
+        long[] arDos = { arNumeros[0], arNumeros[1] };
+        long[] arTres = { arNumeros[0], arNumeros[1], arNumeros[2] };
+        long[] arCuatro = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3] };
+        long[] arCinco = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3], arNumeros[4] };
+        long[] arSeis = { arNumeros[0], arNumeros[1], arNumeros[2], arNumeros[3], arNumeros[4], arNumeros[5] };
+
+        if (n == 1_000_000_000_000_000_000L){
+            resultado += Decenas(arNumeros[0]);
+            resultado += " trilió";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 19) {
+            resultado += Decenas(arNumeros[0]);
+            resultado += " trilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 20) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " trilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 21) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " trilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 22) {
+            resultado += Miles(CrearNum(arCuatro, 0));
+            resultado += " trilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 23) {
+            resultado += Miles(CrearNum(arCinco, 0));
+            resultado += " trilions ";
+        } else if (n % 1_000_000_000_000L == 0 && arNumeros.length == 24) {
+            resultado += Miles(CrearNum(arSeis, 0));
+            resultado += " trilions ";
+        } else if (arNumeros.length == 19) {
+            resultado += Decenas(arNumeros[0]);
+            resultado += " trilions ";
+            resultado += Billones(CrearNum(arNumeros, 1));
+        } else if (arNumeros.length == 20) {
+            resultado += Decenas(CrearNum(arDos, 0));
+            resultado += " trilions ";
+            resultado += Billones(CrearNum(arNumeros, 2));
+        } else if (arNumeros.length == 21) {
+            resultado += Centenas(CrearNum(arTres, 0));
+            resultado += " trilions ";
+            resultado += Billones(CrearNum(arNumeros, 3));
+        } else if (arNumeros.length == 22) {
+            resultado += Miles(CrearNum(arCuatro, 0));
+            resultado += " trilions ";
+            resultado += Billones(CrearNum(arNumeros, 4));
+        } else if (arNumeros.length == 23) {
+            resultado += Miles(CrearNum(arCinco, 0));
+            resultado += " trilions ";
+            resultado += Billones(CrearNum(arNumeros, 5));
+        } else if (arNumeros.length == 18) {
+            resultado += Miles(CrearNum(arSeis, 0));
+            resultado += " trilions ";
+            resultado += Billones(CrearNum(arNumeros, 6));
+        }
 
         return resultado.trim();
     }
@@ -291,7 +398,7 @@ public class NumbersCat {
         } else if (n == 10) {
             resultado += "deu";
         } else if (n == 11) {
-            resultado += "once";
+            resultado += "onze";
         } else if (n == 12) {
             resultado += "dotze";
         } else if (n == 13) {
