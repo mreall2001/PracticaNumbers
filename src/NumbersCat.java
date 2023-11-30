@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.Objects;
 
 public class NumbersCat {
 
@@ -30,7 +30,36 @@ public class NumbersCat {
     }
 
     public static long words(String s) {
-        return 0;
+        String[] array = arrayFrase(s);
+        long resultado = 0;
+        int tMil = 0;
+        int tCien = 0;
+        int tMillon = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            if (Objects.equals(array[i], "cents")){
+                tCien++;
+            } else if (Objects.equals(array[i], "mil")) {
+                tMil++;
+            } else if (Objects.equals(array[i], "milions")) {
+                tMillon++;
+            }
+        }
+
+        if (tMillon == 1){
+            resultado = Millones(s);
+        } else if (tMil == 1){
+            resultado = Miles(s);
+        } else if (tCien == 1) {
+            resultado = Centenas(s);
+        } else {
+            resultado = Decenas(s);
+        }
+
+        if (Objects.equals(array[0], "menys")) {
+            resultado = resultado * (-1);
+        }
+        return resultado;
     }
 
     public static String oper(String s) {
@@ -412,13 +441,14 @@ public class NumbersCat {
         } else if (n == 17) {
             resultado += "disset";
         } else if (n == 18) {
-            return "divuit";
+            resultado += "divuit";
         } else if (n == 19) {
             resultado += "dinou";
         }
         return resultado;
 
     }
+
 
     public static String MultiploDeDiez(long n) {
         String resultado = "";
@@ -500,6 +530,156 @@ public class NumbersCat {
         }
 
         return resultado;
+    }
+
+    // --------------------------------------------------
+
+    public static String[] arrayFrase(String s){
+        s = s.toLowerCase();
+        String res = s.replace("-", " ");
+        return res.split(" ");
+    }
+
+    public static String arrayRestante(String[] arrFrase, int indice){
+        String resultado = "";
+
+
+        for (int i = indice+1; i < arrFrase.length; i++) {
+            resultado += arrFrase[i];
+            resultado += " ";
+        }
+
+        return resultado;
+    }
+
+    public static long Decenas(String s){
+        String[] array = arrayFrase(s);
+        long resultado = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            resultado += NumeroUnicoLong(array[i]);
+        }
+        return resultado;
+    }
+
+    public static long Centenas(String s){
+        String[] array = arrayFrase(s);
+        long resultado = 0;
+
+        for (int i = 0; i < array.length; i++) {
+           if (Objects.equals(array[i], "cents")){
+               resultado = resultado * 100;
+           } else {
+               resultado += NumeroUnicoLong(array[i]);
+           }
+        }
+        return resultado;
+    }
+
+    public static long Miles(String s) {
+        String[] array = arrayFrase(s);
+        long resultado = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            if (Objects.equals(array[i], "mil")) {
+                resultado = resultado * 1000;
+                resultado += Centenas(arrayRestante(array, i));
+                break;
+            } else if (Objects.equals(array[i], "cents")) {
+                resultado = resultado * 100;
+            } else {
+                resultado += NumeroUnicoLong(array[i]);
+            }
+        }
+
+
+        return resultado;
+    }
+
+    public static long Millones(String s){
+        String[] array = arrayFrase(s);
+        long resultado = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            if (Objects.equals(array[i], "milions")){
+                resultado = resultado * 1_000_000;
+                resultado += Miles(arrayRestante(array, i));
+                break;
+
+            } else if (Objects.equals(array[i], "cents")) {
+                resultado *= 100;
+            } else {
+                resultado += NumeroUnicoLong(array[i]);
+            }
+        }
+
+        return resultado;
+    }
+
+    public static long NumeroUnicoLong(String s){
+
+        if (Objects.equals(s, "un")){
+            return 1;
+        } else if (Objects.equals(s, "dos")) {
+            return 2;
+        } else if (Objects.equals(s, "tres")) {
+            return 3;
+        } else if (Objects.equals(s, "quatre")) {
+            return 4;
+        } else if (Objects.equals(s, "cinc")) {
+            return 5;
+        } else if (Objects.equals(s, "sis")) {
+            return 6;
+        } else if (Objects.equals(s, "set")) {
+            return 7;
+        } else if (Objects.equals(s, "vuit")) {
+            return 8;
+        } else if (Objects.equals(s, "nou")) {
+            return 9;
+        } else if (Objects.equals(s, "deu")) {
+            return 10;
+        } else if (Objects.equals(s, "onze")) {
+            return 11;
+        } else if (Objects.equals(s, "dotze")) {
+            return 12;
+        } else if (Objects.equals(s, "tretze")) {
+            return 13;
+        } else if (Objects.equals(s, "catorze")) {
+            return 14;
+        } else if (Objects.equals(s, "quinze")) {
+            return 15;
+        } else if (Objects.equals(s, "setze")) {
+            return 16;
+        } else if (Objects.equals(s, "disset")) {
+            return 17;
+        } else if (Objects.equals(s, "divuit")) {
+            return 18;
+        } else if (Objects.equals(s, "dinou")) {
+            return 19;
+        } else if (Objects.equals(s, "vint")) {
+            return 20;
+        } else if (Objects.equals(s, "trenta")) {
+            return 30;
+        } else if (Objects.equals(s, "quaranta")) {
+            return 40;
+        } else if (Objects.equals(s, "cinquanta")) {
+            return 50;
+        } else if (Objects.equals(s, "seixanta")) {
+            return 60;
+        } else if (Objects.equals(s, "setanta")) {
+            return 70;
+        } else if (Objects.equals(s, "vuitanta")) {
+            return 80;
+        } else if (Objects.equals(s, "noranta")) {
+            return 90;
+        } else if (Objects.equals(s, "cent")) {
+            return 100;
+        } else if (Objects.equals(s, "milió")) {
+            return 999_999;
+        } else if (Objects.equals(s, "bilió")) {
+            return 1_000_000_000_000L;
+        }
+        return 0;
     }
 
 }
